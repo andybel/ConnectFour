@@ -9,11 +9,11 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    private var gameManager = GameManager(columnCount: 7, rowCount: 6)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        gameManager.logCurrentState()
     }
-
-
 }
-
