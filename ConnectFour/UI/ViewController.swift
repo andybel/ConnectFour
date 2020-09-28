@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  ConnectFour
 //
-//  Created by Andy Bell on 28.09.20.
+//  Created by xxxxxxx on 28.09.20.
 //
 
 import UIKit
@@ -94,6 +94,8 @@ class ViewController: UIViewController {
         
         let aspectRatio = CGFloat(cols) / CGFloat(rows)
         
+        columnsStack.clipsToBounds = true
+        columnsStack.layer.cornerRadius = 20.0
         columnsStack.axis = .horizontal
         columnsStack.distribution = .fillEqually
         columnsStack.translatesAutoresizingMaskIntoConstraints = false
@@ -109,7 +111,8 @@ class ViewController: UIViewController {
         for i in 0..<cols {
             
             let column = ColumnView(frame: .zero)
-            column.backgroundColor = i % 2 == 0 ? UIColor.lightGray : UIColor.white
+            let customGray = UIColor.fromHexString("#f0f0f0") ?? UIColor.lightGray
+            column.backgroundColor = i % 2 == 0 ? customGray : UIColor.white
             column.tag = i
             
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(columnTapAction(_:)))

@@ -2,7 +2,7 @@
 //  DiscView.swift
 //  ConnectFour
 //
-//  Created by Andy Bell on 28.09.20.
+//  Created by xxxxxxx on 28.09.20.
 //
 
 import UIKit

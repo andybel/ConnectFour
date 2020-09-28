@@ -2,32 +2,44 @@
 //  ColumnView.swift
 //  ConnectFour
 //
-//  Created by Andy Bell on 28.09.20.
+//  Created by xxxxxxx on 28.09.20.
 //
 
 import UIKit
 
 class ColumnView: UIView {
+    
+    private var animator: UIDynamicAnimator!
+
+    private let collisionBoundary = UICollisionBehavior()
+    private let gravity = UIGravityBehavior()
+
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        
+        
+        gravity.magnitude = 5.0
+        animator = UIDynamicAnimator(referenceView: self)
+        self.animator.addBehavior(gravity)
+        collisionBoundary.translatesReferenceBoundsIntoBoundary = true
+        self.animator.addBehavior(collisionBoundary)
+    }
 
     func addDiscWithColor(_ color: UIColor) {
      
-        let bottomOffset = CGFloat(subviews.count) * (bounds.size.height / 6)
-    
-        let discView = DiscView(frame: .zero)
+        let dim = bounds.size.width - 3
+        let discView = DiscView(frame: CGRect(x: 3, y: 3, width: dim, height: dim))
         discView.backgroundColor = color
-        discView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(discView)
-
-        NSLayoutConstraint.activate([
-            discView.widthAnchor.constraint(equalTo: widthAnchor),
-            discView.heightAnchor.constraint(equalTo: widthAnchor),
-            discView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -bottomOffset)
-        ])
+        gravity.addItem(discView)
+        collisionBoundary.addItem(discView)
     }
     
     func clearDiscs() {
         
         for disc in subviews where disc.isKind(of: DiscView.self) {
+            gravity.removeItem(disc)
+            collisionBoundary.removeItem(disc)
             disc.removeFromSuperview()
         }
     }
