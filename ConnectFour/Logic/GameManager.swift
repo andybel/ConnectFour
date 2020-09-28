@@ -2,7 +2,7 @@
 //  GameManager.swift
 //  ConnectFour
 //
-//  Created by Andy Bell on 28.09.20.
+//  Created by xxxxx on 28.09.20.
 //
 
 import Foundation
