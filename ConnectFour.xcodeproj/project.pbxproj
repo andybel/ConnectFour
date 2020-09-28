@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23E545E12522273300F145B8 /* UIColor+hexInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E545E02522273300F145B8 /* UIColor+hexInit.swift */; };
+		23E545E625222E2900F145B8 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E545E525222E2900F145B8 /* Player.swift */; };
+		23E545EB25222E4D00F145B8 /* TurnHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E545EA25222E4D00F145B8 /* TurnHandler.swift */; };
+		23E545F0252231AF00F145B8 /* PlayerLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E545EF252231AF00F145B8 /* PlayerLabel.swift */; };
 		23F7B99D2522056A00F2C9C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F7B99C2522056A00F2C9C8 /* AppDelegate.swift */; };
 		23F7B99F2522056A00F2C9C8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F7B99E2522056A00F2C9C8 /* SceneDelegate.swift */; };
 		23F7B9A12522056A00F2C9C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F7B9A02522056A00F2C9C8 /* ViewController.swift */; };
@@ -42,6 +46,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		23E545E02522273300F145B8 /* UIColor+hexInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+hexInit.swift"; sourceTree = "<group>"; };
+		23E545E525222E2900F145B8 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		23E545EA25222E4D00F145B8 /* TurnHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnHandler.swift; sourceTree = "<group>"; };
+		23E545EF252231AF00F145B8 /* PlayerLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLabel.swift; sourceTree = "<group>"; };
 		23F7B9992522056A00F2C9C8 /* ConnectFour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ConnectFour.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		23F7B99C2522056A00F2C9C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		23F7B99E2522056A00F2C9C8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -90,6 +98,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		23E545DF2522271100F145B8 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				23E545E02522273300F145B8 /* UIColor+hexInit.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		23F7B9902522056A00F2C9C8 = {
 			isa = PBXGroup;
 			children = (
@@ -159,6 +175,7 @@
 				23F7B9A02522056A00F2C9C8 /* ViewController.swift */,
 				23F7BA0625221F6E00F2C9C8 /* DiscView.swift */,
 				23F7BA0B25221F9B00F2C9C8 /* ColumnView.swift */,
+				23E545EF252231AF00F145B8 /* PlayerLabel.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -169,6 +186,8 @@
 				23F7B9D62522071500F2C9C8 /* GameManager.swift */,
 				23F7B9EB2522122600F2C9C8 /* GameConfig.swift */,
 				23F7B9F92522138000F2C9C8 /* ConfigLoader.swift */,
+				23E545E525222E2900F145B8 /* Player.swift */,
+				23E545EA25222E4D00F145B8 /* TurnHandler.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -176,6 +195,7 @@
 		23F7B9F02522133B00F2C9C8 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				23E545DF2522271100F145B8 /* Extensions */,
 				23F7B9F12522135B00F2C9C8 /* GameError.swift */,
 			);
 			path = Common;
@@ -311,13 +331,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23E545F0252231AF00F145B8 /* PlayerLabel.swift in Sources */,
+				23E545E625222E2900F145B8 /* Player.swift in Sources */,
 				23F7B9F22522135B00F2C9C8 /* GameError.swift in Sources */,
 				23F7B9A12522056A00F2C9C8 /* ViewController.swift in Sources */,
 				23F7B9EC2522122600F2C9C8 /* GameConfig.swift in Sources */,
 				23F7BA0C25221F9B00F2C9C8 /* ColumnView.swift in Sources */,
 				23F7B9D72522071500F2C9C8 /* GameManager.swift in Sources */,
 				23F7B99D2522056A00F2C9C8 /* AppDelegate.swift in Sources */,
+				23E545EB25222E4D00F145B8 /* TurnHandler.swift in Sources */,
 				23F7B99F2522056A00F2C9C8 /* SceneDelegate.swift in Sources */,
+				23E545E12522273300F145B8 /* UIColor+hexInit.swift in Sources */,
 				23F7B9FA2522138000F2C9C8 /* ConfigLoader.swift in Sources */,
 				23F7BA0725221F6E00F2C9C8 /* DiscView.swift in Sources */,
 			);

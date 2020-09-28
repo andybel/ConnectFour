@@ -13,8 +13,11 @@ class ViewController: UIViewController {
     private let columnCount = 7
     private let rowCount = 6
     private let sidePadding: CGFloat = 200.0
+    private let p1Label = PlayerLabel(frame: .zero)
+    private let p2Label = PlayerLabel(frame: .zero)
     
     private var gameManager: GameManager!
+    private var turnHandler: TurnHandler?
     private var columns = [ColumnView]()
     
     override func viewDidLoad() {
@@ -22,6 +25,69 @@ class ViewController: UIViewController {
         
         gameManager = GameManager(columnCount: columnCount, rowCount: rowCount)
         configureMainColumnsStack(cols: columnCount, rows: rowCount)
+        configurePlayerLabels()
+        
+        requestNewGameConfig()
+    }
+    
+    private func requestNewGameConfig() {
+        
+        ConfigLoader().loadConfig { [weak self] result in
+            
+            switch result {
+            case .success(let config):
+                DispatchQueue.main.async {
+                    self?.startNewGame(with: config)
+                }
+            case .failure(let error):
+                print("Config load error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func startNewGame(with config: GameConfig) {
+        
+        gameManager.setupForNewGame()
+        turnHandler = TurnHandler(with: config)
+        
+        if let turnHandler = self.turnHandler {
+            p1Label.text = "Player 1:\n\(turnHandler.player1.name)"
+            p2Label.text = "Player 2:\n\(turnHandler.player2.name)"
+            setPlayerLabelColors()
+        }
+    }
+    
+    private func setPlayerLabelColors() {
+        guard let turnHandler = self.turnHandler  else {
+            return
+        }
+        p1Label.backgroundColor = turnHandler.playerOneColorForCurrentTurn()
+        p2Label.backgroundColor = turnHandler.playerTwoColorForCurrentTurn()
+    }
+    
+    private func configurePlayerLabels() {
+        
+        p1Label.text = "Player 1"
+        p1Label.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(p1Label)
+        
+        NSLayoutConstraint.activate([
+            p1Label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            p1Label.trailingAnchor.constraint(equalTo: columnsStack.leadingAnchor, constant: -10),
+            p1Label.centerYAnchor.constraint(equalTo: columnsStack.centerYAnchor),
+            p1Label.heightAnchor.constraint(equalTo: columnsStack.heightAnchor)
+        ])
+        
+        p2Label.text = "Player 2"
+        p2Label.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(p2Label)
+        
+        NSLayoutConstraint.activate([
+            p2Label.leadingAnchor.constraint(equalTo: columnsStack.trailingAnchor, constant: 10),
+            p2Label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            p2Label.centerYAnchor.constraint(equalTo: columnsStack.centerYAnchor),
+            p2Label.heightAnchor.constraint(equalTo: columnsStack.heightAnchor)
+        ])
     }
     
     private func configureMainColumnsStack(cols: Int, rows: Int) {
@@ -63,10 +129,15 @@ class ViewController: UIViewController {
     @IBAction func columnTapAction(_ sender: UITapGestureRecognizer) {
         
         guard let tapColumn = sender.view as? ColumnView,
+              let turnHandler = self.turnHandler,
               gameManager.freeSlotIdxInCol(tapColumn.tag) != nil else {
             return
         }
-        gameManager.insertIntoCol(tapColumn.tag, state: .red)
-        addDiscToColumn(tapColumn.tag, withColor: UIColor.red)
+        gameManager.insertIntoCol(tapColumn.tag, state: turnHandler.slotStateForCurrentPlayer())
+        addDiscToColumn(tapColumn.tag, withColor: turnHandler.currentPlayer.color)
+        
+        // TODO: win check here
+        self.turnHandler?.toggleTurn()
+        setPlayerLabelColors()
     }
 }

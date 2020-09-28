@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GameConfigLoader {
+struct ConfigLoader {
     
     private let configUrlStr = "https://private-75c7a5-blinkist.apiary-mock.com/connectFour/configuration"
     

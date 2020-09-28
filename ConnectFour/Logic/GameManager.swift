@@ -9,8 +9,8 @@ import Foundation
 
 enum SlotState: Int {
     case empty = 0
-    case red = 1
-    case blue = 2
+    case player1 = 1
+    case player2 = 2
 }
 
 struct Slot {
