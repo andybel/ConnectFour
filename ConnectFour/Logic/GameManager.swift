@@ -46,6 +46,14 @@ struct GameManager {
         }
         return nil
     }
+    
+    mutating func insertIntoCol(_ colIdx: Int, state: SlotState) {
+        
+        guard let freeSlotIdx = freeSlotIdxInCol(colIdx) else {
+            return
+        }
+        board[colIdx][freeSlotIdx].state = state
+    }
 }
 
 extension GameManager {
