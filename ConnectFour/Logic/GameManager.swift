@@ -68,6 +68,11 @@ struct GameManager {
             return true
         }
         
+        if horzLineCount(fromCol: colIdx, fromSlot: slotIdx, forState: state) == winLineCount {
+            print("we have a (horizontal) winner!")
+            return true
+        }
+        
         return false
     }
     
@@ -86,6 +91,45 @@ struct GameManager {
             }
             slotCount += 1
             checkIdx += 1
+        }
+        return slotCount
+    }
+    
+    func horzLineCount(fromCol colIdx: Int, fromSlot slotIdx: Int, forState state: SlotState) -> Int {
+    
+        var slotCount = 1
+        
+        // check to left
+        if colIdx > 0 {
+            var colCheckIdx = colIdx - 1
+            
+            while colCheckIdx >= 0 {
+                
+                let leftNeighbourState = board[colCheckIdx][slotIdx].state
+                print("<<< check state for col: \(colCheckIdx), row: \(slotIdx) = \(leftNeighbourState)")
+                guard leftNeighbourState == state else {
+                    break
+                }
+                slotCount += 1
+                colCheckIdx -= 1
+            }
+        }
+        
+        // then check to right if winCount not reached
+        if colIdx < board.count {
+            
+            var colCheckIdx = colIdx + 1
+            
+            while colCheckIdx < board.count {
+                
+                let rightNeighbourState = board[colCheckIdx][slotIdx].state
+                print(">>> check state forcol: \(colCheckIdx), row: \(slotIdx) = \(rightNeighbourState)")
+                guard rightNeighbourState == state else {
+                    break
+                }
+                slotCount += 1
+                colCheckIdx += 1
+            }
         }
         return slotCount
     }

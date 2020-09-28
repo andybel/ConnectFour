@@ -63,4 +63,26 @@ class GameManagerTests: XCTestCase {
         sut.setupForNewGame()
         XCTAssertFalse(sut.hasWinner, "hasWinner should be false after game reset")
     }
+    
+    func test_GameManagerReportsWin_afterHorizontalItemsInserted() {
+    
+        sut.insertIntoCol(3, state: .player2)
+        sut.insertIntoCol(4, state: .player2)
+        sut.insertIntoCol(5, state: .player2)
+        sut.insertIntoCol(6, state: .player2)
+        XCTAssertTrue(sut.hasWinner, "hasWinner should be true after 4 horizontal insertions of the same state")
+        
+        sut.setupForNewGame()
+        XCTAssertFalse(sut.hasWinner, "hasWinner should be false after game reset")
+        
+        sut.insertIntoCol(0, state: .player2)
+        sut.insertIntoCol(1, state: .player1)
+        sut.insertIntoCol(2, state: .player2)
+        sut.insertIntoCol(3, state: .player1)
+        sut.insertIntoCol(0, state: .player1)
+        sut.insertIntoCol(1, state: .player1)
+        sut.insertIntoCol(2, state: .player1)
+        sut.insertIntoCol(3, state: .player1)
+        XCTAssertTrue(sut.hasWinner, "hasWinner should be true after 4 horizontal insertions of the same state")
+    }
 }
