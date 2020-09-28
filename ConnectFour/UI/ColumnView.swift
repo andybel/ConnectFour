@@ -24,4 +24,11 @@ class ColumnView: UIView {
             discView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -bottomOffset)
         ])
     }
+    
+    func clearDiscs() {
+        
+        for disc in subviews where disc.isKind(of: DiscView.self) {
+            disc.removeFromSuperview()
+        }
+    }
 }

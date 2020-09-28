@@ -22,20 +22,15 @@ struct TurnHandler {
         self.player1 = Player(name: config.name1, color: color1)
         self.player2 = Player(name: config.name2, color: color2)
         
-        if let startingPlayer = [player1, player2].randomElement() {
-            self.currentPlayer = startingPlayer
-        } else {
-            self.currentPlayer = player1
-        }
+        self.currentPlayer = player1
     }
     
     mutating func toggleTurn() {
         currentPlayer = currentPlayer == player1 ? player2 : player1
-        print("toggle player to: \(currentPlayer)")
     }
     
     func slotStateForCurrentPlayer() -> SlotState {
-        return currentPlayer == player1 ? .player2 : .player1
+        return currentPlayer == player1 ? .player1 : .player2
     }
     
     func playerOneColorForCurrentTurn() -> UIColor {

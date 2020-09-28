@@ -126,6 +126,37 @@ class ViewController: UIViewController {
         column.addDiscWithColor(color)
     }
     
+    private func clearGameUI() {
+        
+        p1Label.text = ""
+        p1Label.backgroundColor = .clear
+        p2Label.text = ""
+        p2Label.backgroundColor = .clear
+        
+        for col in columnsStack.subviews where col.isKind(of: ColumnView.self) {
+            print("clearing column: \(col)")
+            guard let colView = col as? ColumnView else {
+                return
+            }
+            colView.clearDiscs()
+        }
+    }
+    
+    private func displayWin(for player: Player) {
+        
+        let alert = UIAlertController(title: "Four In A Row!", message: "\(player.name) has won the game", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "New Game", style: .default, handler: resetForNewGame))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func resetForNewGame(_ sender: Any) {
+        
+        print("reset for new game")
+        clearGameUI()
+        gameManager.setupForNewGame()
+        requestNewGameConfig()
+    }
+    
     @IBAction func columnTapAction(_ sender: UITapGestureRecognizer) {
         
         guard let tapColumn = sender.view as? ColumnView,
@@ -136,8 +167,11 @@ class ViewController: UIViewController {
         gameManager.insertIntoCol(tapColumn.tag, state: turnHandler.slotStateForCurrentPlayer())
         addDiscToColumn(tapColumn.tag, withColor: turnHandler.currentPlayer.color)
         
-        // TODO: win check here
-        self.turnHandler?.toggleTurn()
-        setPlayerLabelColors()
+        if gameManager.hasWinner {
+            displayWin(for: turnHandler.currentPlayer)
+        } else {
+            self.turnHandler?.toggleTurn()
+            setPlayerLabelColors()
+        }
     }
 }

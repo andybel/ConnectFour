@@ -21,8 +21,11 @@ struct GameManager {
     
     private let columnCount: Int
     private let rowCount: Int
+    private let winLineCount = 4
     
     private var board = [[Slot]]()
+    
+    var hasWinner = false
     
     init(columnCount: Int, rowCount: Int) {
         self.columnCount = columnCount
@@ -32,6 +35,7 @@ struct GameManager {
     }
     
     mutating func setupForNewGame() {
+        hasWinner = false
         board = [[Slot]](repeating: [Slot](repeating: Slot(), count: rowCount), count: columnCount)
     }
     
@@ -53,6 +57,37 @@ struct GameManager {
             return
         }
         board[colIdx][freeSlotIdx].state = state
+        
+        hasWinner = checkWin(fromCol: colIdx, fromSlot: freeSlotIdx, forState: state)
+    }
+    
+    private func checkWin(fromCol colIdx: Int, fromSlot slotIdx: Int, forState state: SlotState) -> Bool {
+        
+        if vertLineCount(fromCol: colIdx, fromSlot: slotIdx, forState: state) == winLineCount {
+            print("we have a (vertical) winner!!!")
+            return true
+        }
+        
+        return false
+    }
+    
+    private func vertLineCount(fromCol colIdx: Int, fromSlot slotIdx: Int, forState state: SlotState) -> Int {
+        
+        let checkCol = board[colIdx]
+        var checkIdx = slotIdx + 1
+        var slotCount = 1
+        
+        while checkIdx < checkCol.count {
+            
+            let slotState = checkCol[checkIdx].state
+            
+            guard slotState == state else {
+                return slotCount
+            }
+            slotCount += 1
+            checkIdx += 1
+        }
+        return slotCount
     }
 }
 
