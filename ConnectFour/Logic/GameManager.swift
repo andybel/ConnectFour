@@ -17,6 +17,10 @@ struct Slot {
     var state: SlotState = .empty
 }
 
+enum GameState {
+    case inProgress, won, draw
+}
+
 struct GameManager {
     
     private let columnCount: Int
@@ -25,7 +29,7 @@ struct GameManager {
     
     private var board = [[Slot]]()
     
-    var hasWinner = false
+    var gameState: GameState = .inProgress
     
     init(columnCount: Int, rowCount: Int) {
         self.columnCount = columnCount
@@ -35,7 +39,7 @@ struct GameManager {
     }
     
     mutating func setupForNewGame() {
-        hasWinner = false
+        gameState = .inProgress
         board = [[Slot]](repeating: [Slot](repeating: Slot(), count: rowCount), count: columnCount)
     }
     
@@ -53,12 +57,17 @@ struct GameManager {
     
     mutating func insertIntoCol(_ colIdx: Int, state: SlotState) {
         
-        guard let freeSlotIdx = freeSlotIdxInCol(colIdx) else {
+        guard gameState == .inProgress,
+              let freeSlotIdx = freeSlotIdxInCol(colIdx) else {
             return
         }
         board[colIdx][freeSlotIdx].state = state
         
-        hasWinner = checkWin(fromCol: colIdx, fromSlot: freeSlotIdx, forState: state)
+        if checkWin(fromCol: colIdx, fromSlot: freeSlotIdx, forState: state) {
+            gameState = .won
+        } else if checkForDraw() {
+            gameState = .draw
+        }
     }
     
     private func checkWin(fromCol colIdx: Int, fromSlot slotIdx: Int, forState state: SlotState) -> Bool {
@@ -66,10 +75,14 @@ struct GameManager {
         if vertLineCount(fromCol: colIdx, fromSlot: slotIdx, forState: state) == winLineCount {
             print("we have a (vertical) winner!!!")
             return true
-        }
-        
-        if horzLineCount(fromCol: colIdx, fromSlot: slotIdx, forState: state) == winLineCount {
+        } else if horzLineCount(fromCol: colIdx, fromSlot: slotIdx, forState: state) == winLineCount {
             print("we have a (horizontal) winner!")
+            return true
+        } else if leftDiagonalLineCount(fromCol: colIdx, fromSlot: slotIdx, forState: state) == winLineCount {
+            print("we have a (left-diagonal) winner!")
+            return true
+        } else if rightDiagonalLineCount(fromCol: colIdx, fromSlot: slotIdx, forState: state) == winLineCount {
+            print("we have a (right-diagonal) winner!")
             return true
         }
         
@@ -95,7 +108,7 @@ struct GameManager {
         return slotCount
     }
     
-    func horzLineCount(fromCol colIdx: Int, fromSlot slotIdx: Int, forState state: SlotState) -> Int {
+    private func horzLineCount(fromCol colIdx: Int, fromSlot slotIdx: Int, forState state: SlotState) -> Int {
     
         var slotCount = 1
         
@@ -132,6 +145,97 @@ struct GameManager {
             }
         }
         return slotCount
+    }
+    
+    private func leftDiagonalLineCount(fromCol colIdx: Int, fromSlot slotIdx: Int, forState state: SlotState) -> Int {
+    
+        var checkRowIdx = slotIdx
+        var checkColIdx = colIdx
+        var slotCount = 1
+
+        // search up and left
+        while checkColIdx > 0 && checkRowIdx > 0 {
+
+            checkColIdx -= 1
+            checkRowIdx -= 1
+            
+            let checkState = board[checkColIdx][checkRowIdx].state
+            print("<<<^^^ check state for col: \(checkColIdx), row: \(checkRowIdx) = \(checkState)")
+            guard checkState == state else {
+                break
+            }
+            slotCount += 1
+        }
+
+        // search down and right
+        checkRowIdx = slotIdx
+        checkColIdx = colIdx
+        while checkColIdx < board.count - 1 && checkRowIdx < rowCount - 1 {
+
+            checkColIdx += 1
+            checkRowIdx += 1
+            
+            print("!!! check state for col: \(checkColIdx), row: \(checkRowIdx)")
+            let checkState = board[checkColIdx][checkRowIdx].state
+            print("vvv>>> check state for col: \(checkColIdx), row: \(checkRowIdx) = \(checkState)")
+            guard checkState == state else {
+                break
+            }
+            slotCount += 1
+        }
+    
+        return slotCount
+    }
+    
+    private func rightDiagonalLineCount(fromCol colIdx: Int, fromSlot slotIdx: Int, forState state: SlotState) -> Int {
+    
+        var checkRowIdx = slotIdx
+        var checkColIdx = colIdx
+        var slotCount = 1
+        
+        // search up and right
+        while checkColIdx < columnCount - 1 && checkRowIdx > 0 {
+
+            checkColIdx += 1
+            checkRowIdx -= 1
+            
+            let checkState = board[checkColIdx][checkRowIdx].state
+            print("^^^>>> check state for col: \(checkColIdx), row: \(checkRowIdx) = \(checkState)")
+            guard checkState == state else {
+                break
+            }
+            slotCount += 1
+        }
+        
+        // search down and left
+        checkRowIdx = slotIdx
+        checkColIdx = colIdx
+        while checkColIdx > 0 && checkRowIdx < rowCount - 1 {
+
+            checkColIdx -= 1
+            checkRowIdx += 1
+            
+            let checkState = board[checkColIdx][checkRowIdx].state
+            print("vvv<<< check state for col: \(checkColIdx), row: \(checkRowIdx) = \(checkState)")
+            guard checkState == state else {
+                break
+            }
+            slotCount += 1
+        }
+        
+        return slotCount
+    }
+    
+    private func checkForDraw() -> Bool {
+        
+        for col in board {
+            for row in col {
+                if row.state == .empty {
+                    return false
+                }
+            }
+        }
+        return true
     }
 }
 

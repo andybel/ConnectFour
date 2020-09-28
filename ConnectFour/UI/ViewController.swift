@@ -134,7 +134,6 @@ class ViewController: UIViewController {
         p2Label.backgroundColor = .clear
         
         for col in columnsStack.subviews where col.isKind(of: ColumnView.self) {
-            print("clearing column: \(col)")
             guard let colView = col as? ColumnView else {
                 return
             }
@@ -149,9 +148,14 @@ class ViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func resetForNewGame(_ sender: Any) {
+    private func displayForDraw() {
         
-        print("reset for new game")
+        let alert = UIAlertController(title: "It's A Draw!", message: "The slots are full. Let's play another one...", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "New Game", style: .default, handler: resetForNewGame))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func resetForNewGame(_ sender: Any) {
         clearGameUI()
         gameManager.setupForNewGame()
         requestNewGameConfig()
@@ -167,9 +171,12 @@ class ViewController: UIViewController {
         gameManager.insertIntoCol(tapColumn.tag, state: turnHandler.slotStateForCurrentPlayer())
         addDiscToColumn(tapColumn.tag, withColor: turnHandler.currentPlayer.color)
         
-        if gameManager.hasWinner {
+        switch gameManager.gameState {
+        case .won:
             displayWin(for: turnHandler.currentPlayer)
-        } else {
+        case .draw:
+            displayForDraw()
+        default:
             self.turnHandler?.toggleTurn()
             setPlayerLabelColors()
         }

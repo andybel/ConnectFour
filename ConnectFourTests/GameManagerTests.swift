@@ -52,28 +52,30 @@ class GameManagerTests: XCTestCase {
     
     func test_GameManagerReportsWin_afterVerticalItemsInserted() {
     
-        XCTAssertFalse(sut.hasWinner, "hasWinner should be false after game init")
+        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after init")
         
         sut.insertIntoCol(0, state: .player1)
         sut.insertIntoCol(0, state: .player1)
         sut.insertIntoCol(0, state: .player1)
         sut.insertIntoCol(0, state: .player1)
-        XCTAssertTrue(sut.hasWinner, "hasWinner should be true after 4 vertical insertions of the same state")
+        XCTAssertEqual(sut.gameState, GameState.won, "gameState should equal 'won' after 4 vertical insertions of the same state")
         
         sut.setupForNewGame()
-        XCTAssertFalse(sut.hasWinner, "hasWinner should be false after game reset")
+        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after game reset")
     }
     
     func test_GameManagerReportsWin_afterHorizontalItemsInserted() {
     
+        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after init")
+        
         sut.insertIntoCol(3, state: .player2)
         sut.insertIntoCol(4, state: .player2)
         sut.insertIntoCol(5, state: .player2)
         sut.insertIntoCol(6, state: .player2)
-        XCTAssertTrue(sut.hasWinner, "hasWinner should be true after 4 horizontal insertions of the same state")
+        XCTAssertEqual(sut.gameState, GameState.won, "gameState should equal 'won' after 4 horizontal insertions of the same state")
         
         sut.setupForNewGame()
-        XCTAssertFalse(sut.hasWinner, "hasWinner should be false after game reset")
+        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after init")
         
         sut.insertIntoCol(0, state: .player2)
         sut.insertIntoCol(1, state: .player1)
@@ -83,6 +85,105 @@ class GameManagerTests: XCTestCase {
         sut.insertIntoCol(1, state: .player1)
         sut.insertIntoCol(2, state: .player1)
         sut.insertIntoCol(3, state: .player1)
-        XCTAssertTrue(sut.hasWinner, "hasWinner should be true after 4 horizontal insertions of the same state")
+        XCTAssertEqual(sut.gameState, GameState.won, "gameState should equal 'won' after 4 horizontal insertions of the same state")
+    }
+    
+    func test_GameManagerReportsWin_afterLeftDiagonalItemsInserted() {
+    
+        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after init")
+        
+        sut.insertIntoCol(3, state: .player2)
+        sut.insertIntoCol(3, state: .player1)
+        sut.insertIntoCol(3, state: .player2)
+        sut.insertIntoCol(3, state: .player1)
+        sut.insertIntoCol(4, state: .player2)
+        sut.insertIntoCol(4, state: .player1)
+        sut.insertIntoCol(4, state: .player1)
+        sut.insertIntoCol(5, state: .player2)
+        sut.insertIntoCol(5, state: .player1)
+        
+        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' when only 3 left-diagonal insertions of the same state")
+        sut.insertIntoCol(6, state: .player2)
+        
+        XCTAssertEqual(sut.gameState, GameState.won, "gameState should equal 'won' after 4 left-diagonal insertions of the same state")
+    }
+    
+    func test_GameManagerReportsWin_afterRightDiagonalItemsInserted() {
+
+        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after init")
+        
+        sut.insertIntoCol(0, state: .player2)
+        sut.insertIntoCol(1, state: .player1)
+        sut.insertIntoCol(2, state: .player2)
+        sut.insertIntoCol(3, state: .player1)
+        sut.insertIntoCol(1, state: .player2)
+        sut.insertIntoCol(2, state: .player1)
+        sut.insertIntoCol(3, state: .player1)
+        sut.insertIntoCol(2, state: .player2)
+        sut.insertIntoCol(3, state: .player1)
+
+        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' when only 3 right-diagonal insertions of the same state")
+        sut.insertIntoCol(3, state: .player2)
+
+        XCTAssertEqual(sut.gameState, GameState.won, "gameState should equal 'won' after 4 right-diagonal insertions of the same state")
+    }
+    
+    func test_GameManagerReportsDraw_whenAllSlotsAreFilled() {
+        
+        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after init")
+        
+        sut.insertIntoCol(0, state: .player2)
+        sut.insertIntoCol(1, state: .player1)
+        sut.insertIntoCol(2, state: .player2)
+        sut.insertIntoCol(3, state: .player1)
+        sut.insertIntoCol(4, state: .player2)
+        sut.insertIntoCol(5, state: .player1)
+        sut.insertIntoCol(6, state: .player1)
+        
+        sut.insertIntoCol(0, state: .player2)
+        sut.insertIntoCol(1, state: .player1)
+        sut.insertIntoCol(2, state: .player2)
+        sut.insertIntoCol(3, state: .player1)
+        sut.insertIntoCol(4, state: .player2)
+        sut.insertIntoCol(5, state: .player1)
+        sut.insertIntoCol(6, state: .player1)
+        
+        sut.insertIntoCol(0, state: .player1)
+        sut.insertIntoCol(1, state: .player2)
+        sut.insertIntoCol(2, state: .player1)
+        sut.insertIntoCol(3, state: .player2)
+        sut.insertIntoCol(4, state: .player1)
+        sut.insertIntoCol(5, state: .player2)
+        sut.insertIntoCol(6, state: .player1)
+        
+        sut.insertIntoCol(0, state: .player1)
+        sut.insertIntoCol(1, state: .player2)
+        sut.insertIntoCol(2, state: .player1)
+        sut.insertIntoCol(3, state: .player2)
+        sut.insertIntoCol(4, state: .player1)
+        sut.insertIntoCol(5, state: .player2)
+        sut.insertIntoCol(6, state: .player2)
+        
+        sut.insertIntoCol(0, state: .player2)
+        sut.insertIntoCol(1, state: .player1)
+        sut.insertIntoCol(2, state: .player2)
+        sut.insertIntoCol(3, state: .player1)
+        sut.insertIntoCol(4, state: .player2)
+        sut.insertIntoCol(5, state: .player1)
+        sut.insertIntoCol(6, state: .player2)
+        
+        sut.insertIntoCol(0, state: .player1)
+        sut.insertIntoCol(1, state: .player2)
+        sut.insertIntoCol(2, state: .player1)
+        sut.insertIntoCol(3, state: .player2)
+        sut.insertIntoCol(4, state: .player1)
+        sut.insertIntoCol(5, state: .player2)
+        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after all slots but 1 have been filled")
+        
+        sut.insertIntoCol(6, state: .player1)
+        
+        XCTAssertEqual(sut.gameState, GameState.draw, "gameState should equal 'draw' after all slots filled")
+        
+        
     }
 }
