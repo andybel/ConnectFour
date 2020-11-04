@@ -34,13 +34,9 @@ class ViewController: UIViewController {
         
         ConfigLoader().loadConfig { [weak self] result in
             
-            switch result {
-            case .success(let config):
-                DispatchQueue.main.async {
-                    self?.startNewGame(with: config)
-                }
-            case .failure(let error):
-                print("Config load error: \(error.localizedDescription)")
+            let config = (try? result.get()) ?? GameConfig.defaultBackup
+            DispatchQueue.main.async {
+                self?.startNewGame(with: config)
             }
         }
     }

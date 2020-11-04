@@ -9,7 +9,7 @@ import Foundation
 
 struct ConfigLoader {
     
-    private let configUrlStr = "https://private-75c7a5-blinkist.apiary-mock.com/connectFour/configuration"
+    private let configUrlStr = "https://andybel.github.io/connect-four/configuration"
     
     func loadConfig(_ completion: @escaping (_ result: Result<GameConfig, GameError>) -> Void) {
         

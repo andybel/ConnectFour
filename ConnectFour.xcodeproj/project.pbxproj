@@ -162,6 +162,8 @@
 		23F7B9D2252206A200F2C9C8 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				23F7B99C2522056A00F2C9C8 /* AppDelegate.swift */,
+				23F7B99E2522056A00F2C9C8 /* SceneDelegate.swift */,
 				23F7B9A22522056A00F2C9C8 /* Main.storyboard */,
 				23F7B9A52522056C00F2C9C8 /* Assets.xcassets */,
 				23F7B9A72522056C00F2C9C8 /* LaunchScreen.storyboard */,
@@ -173,8 +175,6 @@
 		23F7B9DE2522091100F2C9C8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				23F7B99C2522056A00F2C9C8 /* AppDelegate.swift */,
-				23F7B99E2522056A00F2C9C8 /* SceneDelegate.swift */,
 				23F7B9A02522056A00F2C9C8 /* ViewController.swift */,
 				23F7BA0625221F6E00F2C9C8 /* DiscView.swift */,
 				23F7BA0B25221F9B00F2C9C8 /* ColumnView.swift */,

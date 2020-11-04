@@ -12,4 +12,8 @@ struct GameConfig: Codable {
     let color2: String
     let name1: String
     let name2: String
+
+    static var defaultBackup: GameConfig {
+        return GameConfig(color1: "#000FFF", color2: "#FFF000", name1: "P1", name2: "P2")
+    }
 }
