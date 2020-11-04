@@ -39,7 +39,7 @@ class GameManagerTests: XCTestCase {
         sut.insertIntoCol(0, state: .player1)
         sut.insertIntoCol(0, state: .player1)
         sut.insertIntoCol(0, state: .player1)
-        
+
         let nextFreeIdx = sut.freeSlotIdxInCol(0)
         XCTAssertNotNil(nextFreeIdx, "next free slot idx should not be nil after 3 insertions")
         XCTAssertEqual(nextFreeIdx, 1, "next free slot idx should be 1 after 4 insertions")
@@ -47,7 +47,7 @@ class GameManagerTests: XCTestCase {
         sut.insertIntoCol(0, state: .player1)
         sut.insertIntoCol(0, state: .player1)
         let idxForFullColumn = sut.freeSlotIdxInCol(0)
-        XCTAssertNil(idxForFullColumn, "slot idx should be nil after 6 insertions")
+        XCTAssertEqual(idxForFullColumn, 1, "slot idx should not increment any further after 4 insertions")
     }
     
     func test_GameManagerReportsWin_afterVerticalItemsInserted() {
