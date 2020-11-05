@@ -57,8 +57,11 @@ class ViewController: UIViewController {
         guard let turnHandler = self.turnHandler  else {
             return
         }
-        p1Label.backgroundColor = turnHandler.playerOneColorForCurrentTurn()
-        p2Label.backgroundColor = turnHandler.playerTwoColorForCurrentTurn()
+        
+        UIView.animate(withDuration: 0.3) {
+            self.p1Label.layer.backgroundColor = turnHandler.playerOneColorForCurrentTurn().cgColor
+            self.p2Label.layer.backgroundColor = turnHandler.playerTwoColorForCurrentTurn().cgColor
+        }
     }
     
     private func configurePlayerLabels() {
