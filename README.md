@@ -1,6 +1,6 @@
 # ConnectFour
 
-![App Icon](ConnectFour/SupportingFiles/Assets.xcassets/AppIcon.appiconset/icon_83.5@2x.png) 
+![App Icon](ConnectFour/SupportingFiles/Assets.xcassets/AppIcon.appiconset/icon_76pt@2x.png) 
 
 ### Connect Four Game coded in Swift.
 Demonstrating: 
