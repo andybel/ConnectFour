@@ -107,8 +107,7 @@ class ViewController: UIViewController {
         for i in 0..<cols {
             
             let column = ColumnView(frame: .zero)
-            let customGray = UIColor.fromHexString("#f0f0f0") ?? UIColor.lightGray
-            column.backgroundColor = i % 2 == 0 ? customGray : UIColor.white
+            column.backgroundColor = i % 2 == 0 ? UIColor.systemGray : UIColor.systemGray2
             column.tag = i
             
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(columnTapAction(_:)))

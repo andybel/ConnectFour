@@ -19,6 +19,9 @@ class PlayerLabel: UILabel {
         
         clipsToBounds = true
         layer.cornerRadius = 20.0
+        
+        layer.borderWidth = 6.0
+        layer.borderColor = UIColor.systemGray6.cgColor
     }
     
     required init?(coder: NSCoder) {

@@ -38,9 +38,15 @@ class ColumnView: UIView {
     func clearDiscs() {
         
         for disc in subviews where disc.isKind(of: DiscView.self) {
-            gravity.removeItem(disc)
-            collisionBoundary.removeItem(disc)
-            disc.removeFromSuperview()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double.random(in: 0.0...0.3)) {
+                self.collisionBoundary.removeItem(disc)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    self.gravity.removeItem(disc)
+                    disc.removeFromSuperview()
+                }
+            }
         }
     }
 }
