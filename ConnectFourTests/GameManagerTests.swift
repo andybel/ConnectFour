@@ -14,7 +14,7 @@ class GameManagerTests: XCTestCase {
     
     override func setUpWithError() throws {
         try super.setUpWithError()
-        sut = GameManager(columnCount: 7, rowCount: 6)
+        sut = GameManager(grid: GameGrid(columns: 7, rows: 6))
     }
 
     override func tearDownWithError() throws {
@@ -47,27 +47,27 @@ class GameManagerTests: XCTestCase {
         sut.insertIntoCol(0, state: .player1)
         sut.insertIntoCol(0, state: .player1)
         let idxForFullColumn = sut.freeSlotIdxInCol(0)
-        XCTAssertEqual(idxForFullColumn, 1, "slot idx should not increment any further after 4 insertions")
+        XCTAssertNil(idxForFullColumn, "slot idx should be nil after 4 insertions")
     }
     
     func test_GameManagerReportsWin_afterVerticalItemsInserted() {
     
-        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after init")
+        XCTAssertEqual(sut.gameState, GameState.started, "gameState should equal 'started' after init")
         
         sut.insertIntoCol(0, state: .player1)
+        
+        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after item insertion")
         sut.insertIntoCol(0, state: .player1)
         sut.insertIntoCol(0, state: .player1)
         sut.insertIntoCol(0, state: .player1)
         XCTAssertEqual(sut.gameState, GameState.won, "gameState should equal 'won' after 4 vertical insertions of the same state")
         
         sut.setupForNewGame()
-        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after game reset")
+        XCTAssertEqual(sut.gameState, GameState.started, "gameState should equal 'started' after game reset")
     }
     
     func test_GameManagerReportsWin_afterHorizontalItemsInserted() {
     
-        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after init")
-        
         sut.insertIntoCol(3, state: .player2)
         sut.insertIntoCol(4, state: .player2)
         sut.insertIntoCol(5, state: .player2)
@@ -75,7 +75,7 @@ class GameManagerTests: XCTestCase {
         XCTAssertEqual(sut.gameState, GameState.won, "gameState should equal 'won' after 4 horizontal insertions of the same state")
         
         sut.setupForNewGame()
-        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after init")
+        XCTAssertEqual(sut.gameState, GameState.started, "gameState should equal 'started' after init")
         
         sut.insertIntoCol(0, state: .player2)
         sut.insertIntoCol(1, state: .player1)
@@ -90,8 +90,6 @@ class GameManagerTests: XCTestCase {
     
     func test_GameManagerReportsWin_afterLeftDiagonalItemsInserted() {
     
-        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after init")
-        
         sut.insertIntoCol(3, state: .player2)
         sut.insertIntoCol(3, state: .player1)
         sut.insertIntoCol(3, state: .player2)
@@ -109,8 +107,6 @@ class GameManagerTests: XCTestCase {
     }
     
     func test_GameManagerReportsWin_afterRightDiagonalItemsInserted() {
-
-        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after init")
         
         sut.insertIntoCol(0, state: .player2)
         sut.insertIntoCol(1, state: .player1)
@@ -129,8 +125,6 @@ class GameManagerTests: XCTestCase {
     }
     
     func test_GameManagerReportsDraw_whenAllSlotsAreFilled() {
-        
-        XCTAssertEqual(sut.gameState, GameState.inProgress, "gameState should equal 'inProgress' after init")
         
         sut.insertIntoCol(0, state: .player2)
         sut.insertIntoCol(1, state: .player1)
