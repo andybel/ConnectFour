@@ -17,12 +17,12 @@ protocol ViewModel {
     var gameStateDidUpdate: ((_ gameState: GameState) -> Void) { get set }
     var columnCount: Int { get }
     var rowCount: Int { get }
-    
     var playerOneName: String { get }
     var playerTwoName: String { get }
     var playerOneColor: UIColor { get }
     var playerTwoColor: UIColor { get }
     var currentMove: GameMove? { get set }
+    var winnerName: String { get }
     
     func requestNewGame()
     func didTapColumn(_ colIdx: Int)
@@ -46,6 +46,9 @@ class ViewModelDefault: ViewModel {
         turnHandler?.playerTwoColorForCurrentTurn() ?? UIColor.gray
     }
     var currentMove: GameMove? = nil
+    var winnerName: String {
+        return turnHandler?.currentPlayer.name ?? "Player"
+    }
     
     private var gameManager: GameManager
     private let configLoader: ConfigLoader

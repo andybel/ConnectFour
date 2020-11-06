@@ -39,7 +39,7 @@ class ViewController: UIViewController {
         switch gameState {
         case .won:
             addDisc(forMove: viewModel.currentMove)
-            displayWin(for: "<UPDATE PLAYER NAME>")
+            displayWin(for: viewModel.winnerName)
         case .draw:
             addDisc(forMove: viewModel.currentMove)
             displayForDraw()
