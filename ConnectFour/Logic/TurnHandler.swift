@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct TurnHandler {
+final class TurnHandler {
     
     let player1: Player
     let player2: Player
@@ -22,10 +22,10 @@ struct TurnHandler {
         self.player1 = Player(name: config.name1, color: color1)
         self.player2 = Player(name: config.name2, color: color2)
         
-        self.currentPlayer = player1
+        self.currentPlayer = Bool.random() ? player1 : player2
     }
     
-    mutating func toggleTurn() {
+    func toggleTurn() {
         currentPlayer = currentPlayer == player1 ? player2 : player1
     }
     

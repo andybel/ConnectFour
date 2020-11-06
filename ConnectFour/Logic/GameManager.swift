@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct GameGrid {
+    let columns: Int
+    let rows: Int
+}
+
 enum SlotState: Int {
     case empty = 0
     case player1 = 1
@@ -18,29 +23,28 @@ struct Slot {
 }
 
 enum GameState {
-    case inProgress, won, draw
+    case started, inProgress, won, draw
 }
 
 struct GameManager {
     
-    private let columnCount: Int
-    private let rowCount: Int
+    let grid: GameGrid
+    
+    var gameState: GameState = .started
+    
     private let winLineCount = 4
     
     private var board = [[Slot]]()
     
-    var gameState: GameState = .inProgress
-    
-    init(columnCount: Int, rowCount: Int) {
-        self.columnCount = columnCount
-        self.rowCount = rowCount
+    init(grid: GameGrid) {
+        self.grid = grid
         
         self.setupForNewGame()
     }
     
     mutating func setupForNewGame() {
-        gameState = .inProgress
-        board = [[Slot]](repeating: [Slot](repeating: Slot(), count: rowCount), count: columnCount)
+        gameState = .started
+        board = [[Slot]](repeating: [Slot](repeating: Slot(), count: grid.rows), count: grid.columns)
     }
     
     func freeSlotIdxInCol(_ colIdx: Int) -> Int? {
@@ -57,8 +61,7 @@ struct GameManager {
     
     mutating func insertIntoCol(_ colIdx: Int, state: SlotState) {
         
-        guard gameState == .inProgress,
-              let freeSlotIdx = freeSlotIdxInCol(colIdx) else {
+        guard let freeSlotIdx = freeSlotIdxInCol(colIdx) else {
             return
         }
         board[colIdx][freeSlotIdx].state = state
@@ -67,6 +70,8 @@ struct GameManager {
             gameState = .won
         } else if checkForDraw() {
             gameState = .draw
+        } else {
+            gameState = .inProgress
         }
     }
     
@@ -170,7 +175,7 @@ struct GameManager {
         // search down and right
         checkRowIdx = slotIdx
         checkColIdx = colIdx
-        while checkColIdx < board.count - 1 && checkRowIdx < rowCount - 1 {
+        while checkColIdx < board.count - 1 && checkRowIdx < grid.rows - 1 {
 
             checkColIdx += 1
             checkRowIdx += 1
@@ -194,7 +199,7 @@ struct GameManager {
         var slotCount = 1
         
         // search up and right
-        while checkColIdx < columnCount - 1 && checkRowIdx > 0 {
+        while checkColIdx < grid.columns - 1 && checkRowIdx > 0 {
 
             checkColIdx += 1
             checkRowIdx -= 1
@@ -210,7 +215,7 @@ struct GameManager {
         // search down and left
         checkRowIdx = slotIdx
         checkColIdx = colIdx
-        while checkColIdx > 0 && checkRowIdx < rowCount - 1 {
+        while checkColIdx > 0 && checkRowIdx < grid.rows - 1 {
 
             checkColIdx -= 1
             checkRowIdx += 1

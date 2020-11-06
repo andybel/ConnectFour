@@ -10,57 +10,54 @@ import UIKit
 class ViewController: UIViewController {
 
     private let columnsStack = UIStackView(frame: .zero)
-    private let columnCount = 7
-    private let rowCount = 6
     private let sidePadding: CGFloat = 200.0
     private let p1Label = PlayerLabel(frame: .zero)
     private let p2Label = PlayerLabel(frame: .zero)
+
+    var viewModel: ViewModelDefault!
     
-    private var gameManager: GameManager!
-    private var turnHandler: TurnHandler?
     private var columns = [ColumnView]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        gameManager = GameManager(columnCount: columnCount, rowCount: rowCount)
-        configureMainColumnsStack(cols: columnCount, rows: rowCount)
+        configureMainColumnsStack(cols: viewModel.columnCount, rows: viewModel.rowCount)
         configurePlayerLabels()
         
-        requestNewGameConfig()
-    }
-    
-    private func requestNewGameConfig() {
-        
-        ConfigLoader().loadConfig { [weak self] result in
-            
-            let config = (try? result.get()) ?? GameConfig.defaultBackup
+        viewModel.gameStateDidUpdate = { [weak self] gameState in
+            guard let self = self else { return }
             DispatchQueue.main.async {
-                self?.startNewGame(with: config)
+                self.layoutForGameState(gameState)
             }
         }
+        
+        viewModel.requestNewGame()
     }
     
-    private func startNewGame(with config: GameConfig) {
+    private func layoutForGameState(_ gameState: GameState) {
         
-        gameManager.setupForNewGame()
-        turnHandler = TurnHandler(with: config)
-        
-        if let turnHandler = self.turnHandler {
-            p1Label.text = "Player 1:\n\(turnHandler.player1.name)"
-            p2Label.text = "Player 2:\n\(turnHandler.player2.name)"
+        switch gameState {
+        case .won:
+            addDisc(forMove: viewModel.currentMove)
+            displayWin(for: "<UPDATE PLAYER NAME>")
+        case .draw:
+            addDisc(forMove: viewModel.currentMove)
+            displayForDraw()
+        case .inProgress:
+            addDisc(forMove: viewModel.currentMove)
+            setPlayerLabelColors()
+        case .started:
+            p1Label.text = "Player 1:\n\(viewModel.playerOneName)"
+            p2Label.text = "Player 2:\n\(viewModel.playerTwoName)"
             setPlayerLabelColors()
         }
     }
     
     private func setPlayerLabelColors() {
-        guard let turnHandler = self.turnHandler  else {
-            return
-        }
-        
+
         UIView.animate(withDuration: 0.3) {
-            self.p1Label.layer.backgroundColor = turnHandler.playerOneColorForCurrentTurn().cgColor
-            self.p2Label.layer.backgroundColor = turnHandler.playerTwoColorForCurrentTurn().cgColor
+            self.p1Label.layer.backgroundColor = self.viewModel.playerOneColor.cgColor
+            self.p2Label.layer.backgroundColor = self.viewModel.playerTwoColor.cgColor
         }
     }
     
@@ -122,10 +119,10 @@ class ViewController: UIViewController {
         }
     }
     
-    private func addDiscToColumn(_ coldIdx: Int, withColor color: UIColor) {
-        
-        let column = columns[coldIdx]
-        column.addDiscWithColor(color)
+    private func addDisc(forMove gameMove: GameMove?) {
+        guard let move = gameMove else { return }
+        let column = columns[move.insertColumn]
+        column.addDiscWithColor(move.insertColor)
     }
     
     private func clearGameUI() {
@@ -143,9 +140,9 @@ class ViewController: UIViewController {
         }
     }
     
-    private func displayWin(for player: Player) {
+    private func displayWin(for playerName: String) {
         
-        let alert = UIAlertController(title: "Four In A Row!", message: "\(player.name) has won the game", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Four In A Row!", message: "\(playerName) has won the game", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "New Game", style: .default, handler: resetForNewGame))
         present(alert, animated: true, completion: nil)
     }
@@ -159,28 +156,14 @@ class ViewController: UIViewController {
     
     @IBAction func resetForNewGame(_ sender: Any) {
         clearGameUI()
-        gameManager.setupForNewGame()
-        requestNewGameConfig()
+        viewModel.requestNewGame()
     }
     
     @IBAction func columnTapAction(_ sender: UITapGestureRecognizer) {
         
-        guard let tapColumn = sender.view as? ColumnView,
-              let turnHandler = self.turnHandler,
-              gameManager.freeSlotIdxInCol(tapColumn.tag) != nil else {
+        guard let tapColumn = sender.view as? ColumnView else {
             return
         }
-        gameManager.insertIntoCol(tapColumn.tag, state: turnHandler.slotStateForCurrentPlayer())
-        addDiscToColumn(tapColumn.tag, withColor: turnHandler.currentPlayer.color)
-        
-        switch gameManager.gameState {
-        case .won:
-            displayWin(for: turnHandler.currentPlayer)
-        case .draw:
-            displayForDraw()
-        default:
-            self.turnHandler?.toggleTurn()
-            setPlayerLabelColors()
-        }
+        viewModel.didTapColumn(tapColumn.tag)
     }
 }
