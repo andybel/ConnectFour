@@ -22,7 +22,7 @@ protocol ViewModel {
     var playerOneColor: UIColor { get }
     var playerTwoColor: UIColor { get }
     var currentMove: GameMove? { get set }
-    var winnerName: String { get }
+    var currentTurnName: String { get }
     
     func requestNewGame()
     func didTapColumn(_ colIdx: Int)
@@ -46,7 +46,7 @@ class ViewModelDefault: ViewModel {
         turnHandler?.playerTwoColorForCurrentTurn() ?? UIColor.gray
     }
     var currentMove: GameMove? = nil
-    var winnerName: String {
+    var currentTurnName: String {
         return turnHandler?.currentPlayer.name ?? "Player"
     }
     

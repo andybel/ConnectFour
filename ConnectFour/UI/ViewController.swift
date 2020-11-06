@@ -13,7 +13,8 @@ class ViewController: UIViewController {
     private let sidePadding: CGFloat = 200.0
     private let p1Label = PlayerLabel(frame: .zero)
     private let p2Label = PlayerLabel(frame: .zero)
-
+    private let turnLabel = UILabel(frame: .zero)
+    
     var viewModel: ViewModelDefault!
     
     private var columns = [ColumnView]()
@@ -39,14 +40,16 @@ class ViewController: UIViewController {
         switch gameState {
         case .won:
             addDisc(forMove: viewModel.currentMove)
-            displayWin(for: viewModel.winnerName)
+            displayWin(for: viewModel.currentTurnName)
         case .draw:
             addDisc(forMove: viewModel.currentMove)
             displayForDraw()
         case .inProgress:
             addDisc(forMove: viewModel.currentMove)
+            turnLabel.text = "\(viewModel.currentTurnName) to TAP a column to insert a disc"
             setPlayerLabelColors()
         case .started:
+            turnLabel.text = "\(viewModel.currentTurnName) starts: TAP any column to insert a disc"
             p1Label.text = "Player 1:\n\(viewModel.playerOneName)"
             p2Label.text = "Player 2:\n\(viewModel.playerTwoName)"
             setPlayerLabelColors()
@@ -83,6 +86,23 @@ class ViewController: UIViewController {
             p2Label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
             p2Label.centerYAnchor.constraint(equalTo: columnsStack.centerYAnchor),
             p2Label.heightAnchor.constraint(equalTo: columnsStack.heightAnchor)
+        ])
+    }
+    
+    private func configureTurnLabel() {
+        
+        turnLabel.font = UIFont.boldSystemFont(ofSize: 22.0)
+        turnLabel.textColor = UIColor.label
+        turnLabel.textAlignment = .center
+        turnLabel.text = "Loading game config..."
+        turnLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(turnLabel)
+        
+        NSLayoutConstraint.activate([
+            turnLabel.widthAnchor.constraint(equalTo: columnsStack.widthAnchor),
+            turnLabel.bottomAnchor.constraint(equalTo: columnsStack.topAnchor),
+            turnLabel.centerXAnchor.constraint(equalTo: columnsStack.centerXAnchor),
+            turnLabel.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
     

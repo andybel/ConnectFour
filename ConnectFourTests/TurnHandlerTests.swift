@@ -39,11 +39,15 @@ class TurnHandlerTests: XCTestCase {
     
     func test_turnHandlerReturnsExpectedState_afterTurnToggle() throws {
         
-        XCTAssertEqual(sut.slotStateForCurrentPlayer(), SlotState.player1)
+        let startingPlayer = sut.currentPlayer
+        let startingPlayerSlotState: SlotState = startingPlayer.name == "Sue" ? .player1 : .player2
+        let followingPlayerSlotState: SlotState = startingPlayer.name == "Sue" ? .player2 : .player1
+        
+        XCTAssertEqual(sut.slotStateForCurrentPlayer(), startingPlayerSlotState)
         sut.toggleTurn()
-        XCTAssertEqual(sut.slotStateForCurrentPlayer(), SlotState.player2)
+        XCTAssertEqual(sut.slotStateForCurrentPlayer(), followingPlayerSlotState)
         sut.toggleTurn()
-        XCTAssertEqual(sut.slotStateForCurrentPlayer(), SlotState.player1)
+        XCTAssertEqual(sut.slotStateForCurrentPlayer(), startingPlayerSlotState)
     }
 }
 
