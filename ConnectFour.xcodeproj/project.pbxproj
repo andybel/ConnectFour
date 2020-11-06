@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		232645D92552CB9700903C14 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232645D82552CB9700903C14 /* ViewModel.swift */; };
+		234117332555B04300BF3772 /* TurnLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234117322555B04300BF3772 /* TurnLabel.swift */; };
 		23E545E12522273300F145B8 /* UIColor+hexInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E545E02522273300F145B8 /* UIColor+hexInit.swift */; };
 		23E545E625222E2900F145B8 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E545E525222E2900F145B8 /* Player.swift */; };
 		23E545EB25222E4D00F145B8 /* TurnHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E545EA25222E4D00F145B8 /* TurnHandler.swift */; };
@@ -49,6 +50,7 @@
 
 /* Begin PBXFileReference section */
 		232645D82552CB9700903C14 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		234117322555B04300BF3772 /* TurnLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnLabel.swift; sourceTree = "<group>"; };
 		23E545E02522273300F145B8 /* UIColor+hexInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+hexInit.swift"; sourceTree = "<group>"; };
 		23E545E525222E2900F145B8 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		23E545EA25222E4D00F145B8 /* TurnHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnHandler.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				23F7BA0625221F6E00F2C9C8 /* DiscView.swift */,
 				23F7BA0B25221F9B00F2C9C8 /* ColumnView.swift */,
 				23E545EF252231AF00F145B8 /* PlayerLabel.swift */,
+				234117322555B04300BF3772 /* TurnLabel.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				23F7B9F22522135B00F2C9C8 /* GameError.swift in Sources */,
 				23F7B9A12522056A00F2C9C8 /* ViewController.swift in Sources */,
 				23F7B9EC2522122600F2C9C8 /* GameConfig.swift in Sources */,
+				234117332555B04300BF3772 /* TurnLabel.swift in Sources */,
 				23F7BA0C25221F9B00F2C9C8 /* ColumnView.swift in Sources */,
 				232645D92552CB9700903C14 /* ViewModel.swift in Sources */,
 				23F7B9D72522071500F2C9C8 /* GameManager.swift in Sources */,
